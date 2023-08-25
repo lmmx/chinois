@@ -1,0 +1,6 @@
+beautifulsoup4
+coverage
+html5lib
+mypy
+pytest
+pytest-cov
