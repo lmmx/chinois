@@ -6,32 +6,19 @@ groups = ["default", "test", "lxml", "html5lib"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:75a9e22d14c94ec41152a5c44ff3257052ce6d5a1a3e6783420a2e2a76bd20ea"
-
-[[package]]
-name = "beautifulsoup4"
-version = "4.12.2"
-requires_python = ">=3.6.0"
-summary = "Screen-scraping library"
-dependencies = [
-    "soupsieve>1.2",
-]
-files = [
-    {file = "beautifulsoup4-4.12.2-py3-none-any.whl", hash = "sha256:bd2520ca0d9d7d12694a53d44ac482d181b4ec1888909b035a3dbf40d0f57d4a"},
-    {file = "beautifulsoup4-4.12.2.tar.gz", hash = "sha256:492bbc69dca35d12daac71c4db1bfff0c876c00ef4a2ffacce226d4638eb72da"},
-]
+content_hash = "sha256:45f5817f1a3a39411fa144771719c67520c157b2d2d8828801b53231b3a211cd"
 
 [[package]]
 name = "campbells"
-version = "0.1.2"
+version = "0.2.0"
 requires_python = ">=3.10"
 summary = "A condensed web scraping library."
 dependencies = [
-    "beautifulsoup4>=4.12.2",
+    "chinois>=0.1.0",
 ]
 files = [
-    {file = "campbells-0.1.2-py3-none-any.whl", hash = "sha256:5b574cd2697d73bc4cd7537fdad86f161f035ef10a3db5194640049e1609d88c"},
-    {file = "campbells-0.1.2.tar.gz", hash = "sha256:00b6c625b0c94fe05f2de38671fe091cf8acb6511eb59de9244c22f6679a3ffe"},
+    {file = "campbells-0.2.0-py3-none-any.whl", hash = "sha256:008b1e29d4caf76e85756a9165a0f4f6dbfe6b5a26da9cc67a5064be6d3389da"},
+    {file = "campbells-0.2.0.tar.gz", hash = "sha256:dc89a5636cab1532f0f7d4e1cf052e67be32aeb3213c00386b9e8eaab21a17b4"},
 ]
 
 [[package]]
@@ -171,16 +158,6 @@ summary = "Python 2 and 3 compatibility utilities"
 files = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
-]
-
-[[package]]
-name = "soupsieve"
-version = "2.4.1"
-requires_python = ">=3.7"
-summary = "A modern CSS selector implementation for Beautiful Soup."
-files = [
-    {file = "soupsieve-2.4.1-py3-none-any.whl", hash = "sha256:1c1bfee6819544a3447586c889157365a27e10d88cde3ad3da0cf0ddf646feb8"},
-    {file = "soupsieve-2.4.1.tar.gz", hash = "sha256:89d12b2d5dfcd2c9e8c22326da9d9aa9cb3dfab0a83a024f05704076ee8d35ea"},
 ]
 
 [[package]]
