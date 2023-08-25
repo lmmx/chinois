@@ -4,7 +4,8 @@ import pickle
 import random
 
 import pytest
-import soupsieve as sv
+
+import chinois as ch
 
 from . import util
 
@@ -34,7 +35,7 @@ class TestSoupSieve(util.TestCase):
 
         soup = self.soup(markup, "html.parser")
         ids = []
-        for el in sv.select("span[id]", soup):
+        for el in ch.select("span[id]", soup):
             ids.append(el.attrs["id"])
 
         self.assertEqual(sorted(["5", "some-id"]), sorted(ids))
@@ -61,7 +62,7 @@ class TestSoupSieve(util.TestCase):
 
         soup = self.soup(markup, "html.parser")
         ids = []
-        for el in sv.select("[id]", soup.body):
+        for el in ch.select("[id]", soup.body):
             ids.append(el.attrs["id"])
 
         self.assertEqual(["1", "2", "3", "4", "5", "some-id", "6"], ids)
@@ -89,7 +90,7 @@ class TestSoupSieve(util.TestCase):
         soup = self.soup(markup, "html.parser")
 
         ids = []
-        for el in sv.select("span[id]", soup, limit=1):
+        for el in ch.select("span[id]", soup, limit=1):
             ids.append(el.attrs["id"])
 
         self.assertEqual(sorted(["5"]), sorted(ids))
@@ -116,8 +117,8 @@ class TestSoupSieve(util.TestCase):
 
         soup = self.soup(markup, "html.parser")
         self.assertEqual(
-            sv.select("span[id]", soup, limit=1)[0].attrs["id"],
-            sv.select_one("span[id]", soup).attrs["id"],
+            ch.select("span[id]", soup, limit=1)[0].attrs["id"],
+            ch.select_one("span[id]", soup).attrs["id"],
         )
 
     def test_select_one_none(self):
@@ -141,7 +142,7 @@ class TestSoupSieve(util.TestCase):
         """
 
         soup = self.soup(markup, "html.parser")
-        self.assertEqual(None, sv.select_one("h1", soup))
+        self.assertEqual(None, ch.select_one("h1", soup))
 
     def test_iselect(self):
         """Test select iterator."""
@@ -166,7 +167,7 @@ class TestSoupSieve(util.TestCase):
         soup = self.soup(markup, "html.parser")
 
         ids = []
-        for el in sv.iselect("span[id]", soup):
+        for el in ch.iselect("span[id]", soup):
             ids.append(el.attrs["id"])
 
         self.assertEqual(sorted(["5", "some-id"]), sorted(ids))
@@ -193,7 +194,7 @@ class TestSoupSieve(util.TestCase):
 
         soup = self.soup(markup, "html.parser")
         ids = []
-        for el in sv.iselect("[id]", soup):
+        for el in ch.iselect("[id]", soup):
             ids.append(el.attrs["id"])
 
         self.assertEqual(["1", "2", "3", "4", "5", "some-id", "6"], ids)
@@ -219,9 +220,9 @@ class TestSoupSieve(util.TestCase):
         """
 
         soup = self.soup(markup, "html.parser")
-        nodes = sv.select("span[id]", soup)
-        self.assertTrue(sv.match("span#\\35", nodes[0]))
-        self.assertFalse(sv.match("span#\\35", nodes[1]))
+        nodes = ch.select("span[id]", soup)
+        self.assertTrue(ch.match("span#\\35", nodes[0]))
+        self.assertFalse(ch.match("span#\\35", nodes[1]))
 
     def test_filter_tag(self):
         """Test filter tag."""
@@ -244,7 +245,7 @@ class TestSoupSieve(util.TestCase):
         """
 
         soup = self.soup(markup, "html.parser")
-        nodes = sv.filter("pre#\\36", soup.html.body)
+        nodes = ch.filter("pre#\\36", soup.html.body)
         self.assertEqual(len(nodes), 1)
         self.assertEqual(nodes[0].attrs["id"], "6")
 
@@ -269,7 +270,7 @@ class TestSoupSieve(util.TestCase):
         """
 
         soup = self.soup(markup, "html.parser")
-        ids = [tag["id"] for tag in sv.filter("[id]", soup.html.body.p)]
+        ids = [tag["id"] for tag in ch.filter("[id]", soup.html.body.p)]
         self.assertEqual(["2", "3"], ids)
 
     def test_filter_list(self):
@@ -299,7 +300,7 @@ class TestSoupSieve(util.TestCase):
         """
 
         soup = self.soup(markup, "html.parser")
-        nodes = sv.filter("pre#\\36", [el for el in soup.html.body.children])
+        nodes = ch.filter("pre#\\36", [el for el in soup.html.body.children])
         self.assertEqual(len(nodes), 1)
         self.assertEqual(nodes[0].attrs["id"], "6")
 
@@ -319,8 +320,8 @@ class TestSoupSieve(util.TestCase):
         """
 
         soup = self.soup(markup, "html.parser")
-        el = sv.select_one("#div-03", soup)
-        self.assertTrue(sv.closest("#div-02", el).attrs["id"] == "div-02")
+        el = ch.select_one("#div-03", soup)
+        self.assertTrue(ch.closest("#div-02", el).attrs["id"] == "div-02")
 
     def test_closest_match_complex_parent(self):
         """Test closest match complex parent."""
@@ -338,9 +339,9 @@ class TestSoupSieve(util.TestCase):
         """
 
         soup = self.soup(markup, "html.parser")
-        el = sv.select_one("#div-03", soup)
-        self.assertTrue(sv.closest("article > div", el).attrs["id"] == "div-01")
-        self.assertTrue(sv.closest(":not(div)", el).attrs["id"] == "article")
+        el = ch.select_one("#div-03", soup)
+        self.assertTrue(ch.closest("article > div", el).attrs["id"] == "div-01")
+        self.assertTrue(ch.closest(":not(div)", el).attrs["id"] == "article")
 
     def test_closest_match_self(self):
         """Test closest match self."""
@@ -358,8 +359,8 @@ class TestSoupSieve(util.TestCase):
         """
 
         soup = self.soup(markup, "html.parser")
-        el = sv.select_one("#div-03", soup)
-        self.assertTrue(sv.closest("div div", el).attrs["id"] == "div-03")
+        el = ch.select_one("#div-03", soup)
+        self.assertTrue(ch.closest("div div", el).attrs["id"] == "div-03")
 
     def test_closest_must_be_parent(self):
         """Test that closest only matches parents or self."""
@@ -377,42 +378,42 @@ class TestSoupSieve(util.TestCase):
         """
 
         soup = self.soup(markup, "html.parser")
-        el = sv.select_one("#div-03", soup)
-        self.assertTrue(sv.closest("div #div-05", el) is None)
-        self.assertTrue(sv.closest("a", el) is None)
+        el = ch.select_one("#div-03", soup)
+        self.assertTrue(ch.closest("div #div-05", el) is None)
+        self.assertTrue(ch.closest("a", el) is None)
 
     def test_escape_hyphen(self):
         """Test escape hyphen cases."""
 
-        self.assertEqual(r"\-", sv.escape("-"))
-        self.assertEqual(r"--", sv.escape("--"))
+        self.assertEqual(r"\-", ch.escape("-"))
+        self.assertEqual(r"--", ch.escape("--"))
 
     def test_escape_numbers(self):
         """Test escape hyphen cases."""
 
-        self.assertEqual(r"\33 ", sv.escape("3"))
-        self.assertEqual(r"-\33 ", sv.escape("-3"))
-        self.assertEqual(r"--3", sv.escape("--3"))
+        self.assertEqual(r"\33 ", ch.escape("3"))
+        self.assertEqual(r"-\33 ", ch.escape("-3"))
+        self.assertEqual(r"--3", ch.escape("--3"))
 
     def test_escape_null(self):
         """Test escape null character."""
 
-        self.assertEqual("\ufffdtest", sv.escape("\x00test"))
+        self.assertEqual("\ufffdtest", ch.escape("\x00test"))
 
     def test_escape_ctrl(self):
         """Test escape control character."""
 
-        self.assertEqual(r"\1 test", sv.escape("\x01test"))
+        self.assertEqual(r"\1 test", ch.escape("\x01test"))
 
     def test_escape_special(self):
         """Test escape special character."""
 
-        self.assertEqual(r"\{\}\[\]\ \(\)", sv.escape("{}[] ()"))
+        self.assertEqual(r"\{\}\[\]\ \(\)", ch.escape("{}[] ()"))
 
     def test_escape_wide_unicode(self):
         """Test handling of wide Unicode."""
 
-        self.assertEqual("Emoji\\ \U0001F60D", sv.escape("Emoji \U0001F60D"))
+        self.assertEqual("Emoji\\ \U0001F60D", ch.escape("Emoji \U0001F60D"))
 
     def test_copy_pickle(self):
         """Test copy and pickle."""
@@ -422,7 +423,7 @@ class TestSoupSieve(util.TestCase):
         # `Selector`, `NullSelector`, `SelectorTag`, `SelectorAttribute`,
         # `SelectorNth`, `SelectorLang`, `SelectorList`, `Namespaces`,
         # `SelectorContains`, and `CustomSelectors`.
-        p1 = sv.compile(
+        p1 = ch.compile(
             'p.class#id[id]:nth-child(2):lang(en):focus:-soup-contains("text", "other text")',
             {"html": "http://www.w3.org/TR/html4/"},
             custom={":--header": "h1, h2, h3, h4, h5, h6"},
@@ -432,7 +433,7 @@ class TestSoupSieve(util.TestCase):
         self.assertTrue(pp1 == p1)
 
         # Test that we pull the same one from cache
-        p2 = sv.compile(
+        p2 = ch.compile(
             'p.class#id[id]:nth-child(2):lang(en):focus:-soup-contains("text", "other text")',
             {"html": "http://www.w3.org/TR/html4/"},
             custom={":--header": "h1, h2, h3, h4, h5, h6"},
@@ -440,7 +441,7 @@ class TestSoupSieve(util.TestCase):
         self.assertTrue(p1 is p2)
 
         # Test that we compile a new one when providing a different flags
-        p3 = sv.compile(
+        p3 = ch.compile(
             'p.class#id[id]:nth-child(2):lang(en):focus:-soup-contains("text", "other text")',
             {"html": "http://www.w3.org/TR/html4/"},
             custom={":--header": "h1, h2, h3, h4, h5, h6"},
@@ -462,37 +463,37 @@ class TestSoupSieve(util.TestCase):
     def test_cache(self):
         """Test cache."""
 
-        sv.purge()
-        self.assertEqual(sv.cp._cached_css_compile.cache_info().currsize, 0)
+        ch.purge()
+        self.assertEqual(ch.cp._cached_css_compile.cache_info().currsize, 0)
         for x in range(1000):
             value = f'[value="{str(random.randint(1, 10000))}"]'
-            p = sv.compile(value)
+            p = ch.compile(value)
             self.assertTrue(p.pattern == value)
-            self.assertTrue(sv.cp._cached_css_compile.cache_info().currsize > 0)
-        self.assertTrue(sv.cp._cached_css_compile.cache_info().currsize == 500)
-        sv.purge()
-        self.assertEqual(sv.cp._cached_css_compile.cache_info().currsize, 0)
+            self.assertTrue(ch.cp._cached_css_compile.cache_info().currsize > 0)
+        self.assertTrue(ch.cp._cached_css_compile.cache_info().currsize == 500)
+        ch.purge()
+        self.assertEqual(ch.cp._cached_css_compile.cache_info().currsize, 0)
 
     def test_recompile(self):
         """If you feed through the same object, it should pass through unless you change parameters."""
 
-        p1 = sv.compile("p[id]")
-        p2 = sv.compile(p1)
+        p1 = ch.compile("p[id]")
+        p2 = ch.compile(p1)
         self.assertTrue(p1 is p2)
 
         with pytest.raises(ValueError):
-            sv.compile(p1, flags=sv.DEBUG)
+            ch.compile(p1, flags=ch.DEBUG)
 
         with pytest.raises(ValueError):
-            sv.compile(p1, namespaces={"": ""})
+            ch.compile(p1, namespaces={"": ""})
 
         with pytest.raises(ValueError):
-            sv.compile(p1, custom={":--header": "h1, h2, h3, h4, h5, h6"})
+            ch.compile(p1, custom={":--header": "h1, h2, h3, h4, h5, h6"})
 
     def test_immutable_dict_size(self):
         """Test immutable dictionary."""
 
-        idict = sv.ct.ImmutableDict({"a": "b", "c": "d"})
+        idict = ch.ct.ImmutableDict({"a": "b", "c": "d"})
         self.assertEqual(2, len(idict))
 
 
@@ -502,7 +503,7 @@ class TestInvalid(util.TestCase):
     def test_immutable_object(self):
         """Test immutable object."""
 
-        obj = sv.ct.Immutable()
+        obj = ch.ct.Immutable()
 
         with self.assertRaises(AttributeError):
             obj.member = 3
@@ -510,7 +511,7 @@ class TestInvalid(util.TestCase):
     def test_immutable_dict_read_only(self):
         """Test immutable dictionary is read only."""
 
-        idict = sv.ct.ImmutableDict({"a": "b", "c": "d"})
+        idict = ch.ct.ImmutableDict({"a": "b", "c": "d"})
         with self.assertRaises(TypeError):
             idict["a"] = "f"
 
@@ -518,79 +519,79 @@ class TestInvalid(util.TestCase):
         """Test immutable dictionary has a hashable value."""
 
         with self.assertRaises(TypeError):
-            sv.ct.ImmutableDict([[3, {}]])
+            ch.ct.ImmutableDict([[3, {}]])
 
     def test_immutable_dict_hashable_key(self):
         """Test immutable dictionary has a hashable key."""
 
         with self.assertRaises(TypeError):
-            sv.ct.ImmutableDict([[{}, 3]])
+            ch.ct.ImmutableDict([[{}, 3]])
 
     def test_immutable_dict_hashable_value_dict(self):
         """Test immutable dictionary has a hashable value."""
 
         with self.assertRaises(TypeError):
-            sv.ct.ImmutableDict({3: {}})
+            ch.ct.ImmutableDict({3: {}})
 
     def test_invalid_namespace_type(self):
         """Test invalid namespace type."""
 
         with self.assertRaises(TypeError):
-            sv.ct.Namespaces(((3, 3),))
+            ch.ct.Namespaces(((3, 3),))
 
     def test_invalid_namespace_hashable_value(self):
         """Test namespace has hashable value."""
 
         with self.assertRaises(TypeError):
-            sv.ct.Namespaces({"a": {}})
+            ch.ct.Namespaces({"a": {}})
 
     def test_invalid_namespace_hashable_key(self):
         """Test namespace key is hashable."""
 
         with self.assertRaises(TypeError):
-            sv.ct.Namespaces({{}: "string"})
+            ch.ct.Namespaces({{}: "string"})
 
     def test_invalid_custom_type(self):
         """Test invalid custom selector type."""
 
         with self.assertRaises(TypeError):
-            sv.ct.CustomSelectors(((3, 3),))
+            ch.ct.CustomSelectors(((3, 3),))
 
     def test_invalid_custom_hashable_value(self):
         """Test custom selector has hashable value."""
 
         with self.assertRaises(TypeError):
-            sv.ct.CustomSelectors({"a": {}})
+            ch.ct.CustomSelectors({"a": {}})
 
     def test_invalid_custom_hashable_key(self):
         """Test custom selector key is hashable."""
 
         with self.assertRaises(TypeError):
-            sv.ct.CustomSelectors({{}: "string"})
+            ch.ct.CustomSelectors({{}: "string"})
 
     def test_invalid_type_input_match(self):
         """Test bad input into the match API."""
 
-        flags = sv.DEBUG
+        flags = ch.DEBUG
 
         with self.assertRaises(TypeError):
-            sv.match("div", "not a tag", flags=flags)
+            ch.match("div", "not a tag", flags=flags)
 
     def test_invalid_type_input_select(self):
         """Test bad input into the select API."""
 
-        flags = sv.DEBUG
+        flags = ch.DEBUG
 
         with self.assertRaises(TypeError):
-            sv.select("div", "not a tag", flags=flags)
+            ch.select("div", "not a tag", flags=flags)
 
     def test_invalid_type_input_filter(self):
         """Test bad input into the filter API."""
 
-        flags = sv.DEBUG
+        flags = ch.DEBUG
 
         with self.assertRaises(TypeError):
-            sv.filter("div", "not a tag", flags=flags)
+            ch.filter("div", "not a tag", flags=flags)
 
 
 class TestSyntaxErrorReporting(util.TestCase):
@@ -599,8 +600,8 @@ class TestSyntaxErrorReporting(util.TestCase):
     def test_syntax_error_has_text_and_position(self):
         """Test that selector syntax errors contain the position."""
 
-        with self.assertRaises(sv.SelectorSyntaxError) as cm:
-            sv.compile("input.field[type=42]")
+        with self.assertRaises(ch.SelectorSyntaxError) as cm:
+            ch.compile("input.field[type=42]")
         e = cm.exception
         self.assertEqual(e.context, "input.field[type=42]\n           ^")
         self.assertEqual(e.line, 1)
@@ -609,8 +610,8 @@ class TestSyntaxErrorReporting(util.TestCase):
     def test_syntax_error_with_multiple_lines(self):
         """Test that multiline selector errors have the right position."""
 
-        with self.assertRaises(sv.SelectorSyntaxError) as cm:
-            sv.compile("input\n" ".field[type=42]")
+        with self.assertRaises(ch.SelectorSyntaxError) as cm:
+            ch.compile("input\n" ".field[type=42]")
         e = cm.exception
         self.assertEqual(e.context, "    input\n--> .field[type=42]\n          ^")
         self.assertEqual(e.line, 2)
@@ -619,8 +620,8 @@ class TestSyntaxErrorReporting(util.TestCase):
     def test_syntax_error_on_third_line(self):
         """Test that multiline selector errors have the right position."""
 
-        with self.assertRaises(sv.SelectorSyntaxError) as cm:
-            sv.compile("input:is(\n" "  [name=foo]\n" "  [type=42]\n" ")\n")
+        with self.assertRaises(ch.SelectorSyntaxError) as cm:
+            ch.compile("input:is(\n" "  [name=foo]\n" "  [type=42]\n" ")\n")
         e = cm.exception
         self.assertEqual(e.line, 3)
         self.assertEqual(e.col, 3)
@@ -628,8 +629,8 @@ class TestSyntaxErrorReporting(util.TestCase):
     def test_simple_syntax_error(self):
         """Test a simple syntax error (no context)."""
 
-        with self.assertRaises(sv.SelectorSyntaxError) as cm:
-            raise sv.SelectorSyntaxError("Syntax Message")
+        with self.assertRaises(ch.SelectorSyntaxError) as cm:
+            raise ch.SelectorSyntaxError("Syntax Message")
 
         e = cm.exception
         self.assertEqual(e.context, None)

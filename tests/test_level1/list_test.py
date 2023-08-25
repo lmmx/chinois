@@ -1,5 +1,5 @@
 """Test selector lists."""
-from soupsieve import SelectorSyntaxError
+from chinois import SelectorSyntaxError
 
 from .. import util
 

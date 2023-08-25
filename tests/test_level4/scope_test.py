@@ -1,5 +1,5 @@
 """Test scope selectors."""
-import soupsieve as sv
+import chinois as ch
 
 from .. import util
 
@@ -47,7 +47,7 @@ class TestScope(util.TestCase):
             el = soup.html
 
             # Scope is the element we are applying the select to, and that element is never returned
-            self.assertTrue(len(sv.select(":scope", el, flags=sv.DEBUG)) == 0)
+            self.assertTrue(len(ch.select(":scope", el, flags=ch.DEBUG)) == 0)
 
     def test_scope_is_select_target(self):
         """Test that scope is the element which scope is called on."""
@@ -58,25 +58,25 @@ class TestScope(util.TestCase):
 
             # Scope here means the current element under select
             ids = []
-            for el in sv.select(":scope div", el, flags=sv.DEBUG):
+            for el in ch.select(":scope div", el, flags=ch.DEBUG):
                 ids.append(el.attrs["id"])
             self.assertEqual(sorted(ids), sorted(["div"]))
 
             el = soup.body
             ids = []
-            for el in sv.select(":scope div", el, flags=sv.DEBUG):
+            for el in ch.select(":scope div", el, flags=ch.DEBUG):
                 ids.append(el.attrs["id"])
             self.assertEqual(sorted(ids), sorted(["div"]))
 
             # `div` is the current element under select, and it has no `div` elements.
             el = soup.div
             ids = []
-            for el in sv.select(":scope div", el, flags=sv.DEBUG):
+            for el in ch.select(":scope div", el, flags=ch.DEBUG):
                 ids.append(el.attrs["id"])
             self.assertEqual(sorted(ids), sorted([]))
 
             # `div` does have an element with the class `.wordshere`
             ids = []
-            for el in sv.select(":scope .wordshere", el, flags=sv.DEBUG):
+            for el in ch.select(":scope .wordshere", el, flags=ch.DEBUG):
                 ids.append(el.attrs["id"])
             self.assertEqual(sorted(ids), sorted(["pre"]))

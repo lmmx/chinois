@@ -1,5 +1,5 @@
 """Test custom selector aliases."""
-import soupsieve as sv
+import chinois as ch
 
 from .. import util
 
@@ -114,7 +114,7 @@ class TestCustomSelectors(util.TestCase):
             ":--parent": "p:--parent-paragraph",
         }
 
-        self.assert_raises(":--parent", sv.SelectorSyntaxError, custom=custom_selectors)
+        self.assert_raises(":--parent", ch.SelectorSyntaxError, custom=custom_selectors)
 
     def test_bad_custom(self):
         """Test that a bad custom raises a syntax error."""
@@ -124,14 +124,14 @@ class TestCustomSelectors(util.TestCase):
             ":--parent-paragraph": "p:--parent",
         }
 
-        self.assert_raises(":--wrong", sv.SelectorSyntaxError, custom=custom_selectors)
+        self.assert_raises(":--wrong", ch.SelectorSyntaxError, custom=custom_selectors)
 
     def test_bad_custom_syntax(self):
         """Test that a custom selector with bad syntax in its name fails."""
 
         self.assert_raises(
             "div",
-            sv.SelectorSyntaxError,
+            ch.SelectorSyntaxError,
             custom={":--parent.": ":has(> *|*)"},
         )
 
@@ -140,7 +140,7 @@ class TestCustomSelectors(util.TestCase):
 
         self.assert_raises(
             "div",
-            sv.SelectorSyntaxError,
+            ch.SelectorSyntaxError,
             custom={":hover": ":has(> *|*)"},
         )
 

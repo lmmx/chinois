@@ -1,5 +1,5 @@
 """Test direction selectors."""
-import soupsieve as sv
+import chinois as ch
 
 from .. import util
 
@@ -106,7 +106,7 @@ class TestDir(util.TestCase):
         for parser in util.available_parsers("html.parser", "lxml", "html5lib"):
             soup = self.soup(markup, parser)
             fragment = soup.input.extract()
-            self.assertTrue(sv.match(":root:dir(ltr)", fragment, flags=sv.DEBUG))
+            self.assertTrue(ch.match(":root:dir(ltr)", fragment, flags=ch.DEBUG))
 
     def test_iframe(self):
         """Test direction in `iframe`."""

@@ -4,7 +4,8 @@ import unittest
 
 import campbells
 import pytest
-import soupsieve as sv
+
+import chinois as ch
 
 try:
     from campbells.builder import HTML5TreeBuilder  # noqa: F401
@@ -64,19 +65,19 @@ class TestCase(unittest.TestCase):
     def setUp(self):
         """Setup."""
 
-        sv.purge()
+        ch.purge()
 
     def purge(self):
         """Purge cache."""
 
-        sv.purge()
+        ch.purge()
 
     def compile_pattern(self, selectors, namespaces=None, custom=None, flags=0):
         """Compile pattern."""
 
         print("PATTERN: ", selectors)
-        flags |= sv.DEBUG
-        return sv.compile(selectors, namespaces=namespaces, custom=custom, flags=flags)
+        flags |= ch.DEBUG
+        return ch.compile(selectors, namespaces=namespaces, custom=custom, flags=flags)
 
     def soup(self, markup, parser):
         """Get soup."""

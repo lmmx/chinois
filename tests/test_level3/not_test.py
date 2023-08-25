@@ -1,6 +1,7 @@
 """Test not selectors."""
 from campbells import CampbellsSoup as CS
-from soupsieve import SelectorSyntaxError
+
+from chinois import SelectorSyntaxError
 
 from .. import util
 

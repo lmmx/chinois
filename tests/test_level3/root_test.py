@@ -1,5 +1,5 @@
 """Test root selectors."""
-import soupsieve as sv
+import chinois as ch
 
 from .. import util
 
@@ -104,12 +104,12 @@ class TestRoot(util.TestCase):
         soup = self.soup(self.MARKUP_IFRAME, "html.parser")
 
         ids = []
-        for el in sv.select(":root div", soup.iframe.html):
+        for el in ch.select(":root div", soup.iframe.html):
             ids.append(el["id"])
         self.assertEqual(sorted(ids), sorted(["div2"]))
 
         ids = []
-        for el in sv.select(":root > body > div", soup.iframe.html):
+        for el in ch.select(":root > body > div", soup.iframe.html):
             ids.append(el["id"])
         self.assertEqual(sorted(ids), sorted(["div2"]))
 

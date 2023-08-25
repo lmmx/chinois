@@ -1,5 +1,5 @@
 """Test child combinators."""
-from soupsieve import SelectorSyntaxError
+from chinois import SelectorSyntaxError
 
 from .. import util
 

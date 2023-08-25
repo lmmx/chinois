@@ -1,7 +1,7 @@
 """Test contains selectors."""
 import warnings
 
-import soupsieve as sv
+import chinois as ch
 
 from .. import util
 
@@ -295,7 +295,7 @@ class TestSoupContains(util.TestCase):
     def test_contains_warn(self):
         """Test old alias raises a warning."""
 
-        sv.purge()
+        ch.purge()
 
         with warnings.catch_warnings(record=True) as w:
             # Cause all warnings to always be triggered.

@@ -1,6 +1,6 @@
 """Test `nth` child selectors."""
-import soupsieve as sv
-from soupsieve import SelectorSyntaxError
+import chinois as ch
+from chinois import SelectorSyntaxError
 
 from .. import util
 
@@ -194,7 +194,7 @@ class TestNthChild(util.TestCase):
             markup = """<p id="1">text</p>"""
             soup = self.soup(markup, parser)
             fragment = soup.p.extract()
-            self.assertTrue(sv.match("p:nth-child(1)", fragment, flags=sv.DEBUG))
+            self.assertTrue(ch.match("p:nth-child(1)", fragment, flags=ch.DEBUG))
 
     def test_nth_child_with_bad_parameters(self):
         """Test that pseudo class fails with bad parameters (basically it doesn't match)."""

@@ -12,8 +12,8 @@ hasn't been tested extensively to make sure we aren't missing corners).
 Example:
 
 ```
->>> import soupsieve as sv
->>> sv.compile('this > that.class[name=value]').selectors.pretty()
+>>> import chinois as ch
+>>> ch.compile('this > that.class[name=value]').selectors.pretty()
 SelectorList(
     selectors=(
         Selector(
