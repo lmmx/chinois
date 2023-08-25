@@ -10,15 +10,15 @@ content_hash = "sha256:45f5817f1a3a39411fa144771719c67520c157b2d2d8828801b53231b
 
 [[package]]
 name = "campbells"
-version = "0.2.0"
+version = "0.2.2"
 requires_python = ">=3.10"
 summary = "A condensed web scraping library."
 dependencies = [
-    "chinois>=0.1.0",
+    "chinois>=0.2.0",
 ]
 files = [
-    {file = "campbells-0.2.0-py3-none-any.whl", hash = "sha256:008b1e29d4caf76e85756a9165a0f4f6dbfe6b5a26da9cc67a5064be6d3389da"},
-    {file = "campbells-0.2.0.tar.gz", hash = "sha256:dc89a5636cab1532f0f7d4e1cf052e67be32aeb3213c00386b9e8eaab21a17b4"},
+    {file = "campbells-0.2.2-py3-none-any.whl", hash = "sha256:e63099e041bc7b1c045dd2ec20b55bb929bdd347640de3e8267e334149a8639b"},
+    {file = "campbells-0.2.2.tar.gz", hash = "sha256:41930cec74f9122f04b8bd88a448be9b73fafe5b667987aa2fe17f75f4494db6"},
 ]
 
 [[package]]
