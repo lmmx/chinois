@@ -2,7 +2,7 @@
 
 # Chinois 🍵
 
-CSS selector implementation for Campbells web scraping library.
+CSS selector implementation for Bisque and Campbells web scraping libraries.
 
 [Install](#installation) •
 [Examples](#examples)
@@ -20,6 +20,12 @@ Adapted from [soupsieve][ss]'s inner package, to remove the hard coupling to Bea
 ``` bash
 pip install chinois
 ```
+
+The dependencies needed to use `bisque` and `campbells` parsing libraries are left to your taste.
+They can be installed with:
+
+- `pip install chinois[bisque]` for the bold new flavours of Pydantic model-based parsers in Bisque.
+- `pip install chinois[campbells]` for the Campbells parsers, preserving the heritage taste of the Beautiful Soup API.
 
 The dependencies needed to use `html5lib` and `lxml` parsers are not installed by default.
 They can be installed with:

@@ -1,15 +1,22 @@
 """
-Chinois - CSS selector implementation for Campbells web scraping library.
+Chinois - CSS selector implementation for Bisque and Campbells web scraping libraries.
 
 https://www.github.com/lmmx/chinois
 
-Campbells is adapted from Soup Sieve under the MIT license.
+Chinois is adapted from Soup Sieve under the MIT license.
 """
 from __future__ import annotations
 
 from typing import Any, Iterable, Iterator
 
-import campbells  # type: ignore[import]
+try:
+    import campbells  # type: ignore[import]
+except ImportError:
+    campbells = None
+try:
+    import bisque  # type: ignore[import]
+except ImportError:
+    bisque = None
 
 from . import css_match as cm
 from . import css_parser as cp

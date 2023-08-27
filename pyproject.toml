@@ -1,7 +1,7 @@
 [project]
 name = "chinois"
 dynamic = ["version"]
-description = "CSS selector implementation for Campbells web scraping library."
+description = "CSS selector implementation for Bisque and Campbells web scraping libraries."
 authors = [
     {name = "Louis Maddox", email = "louismmx@gmail.com"},
 ]
@@ -28,13 +28,18 @@ classifiers = [
     "Topic :: Text Processing :: Markup :: XML",
 ]
 dependencies = [
-    "campbells>=0.2.0",
 ]
 requires-python = ">=3.10"
 readme = "README.md"
 license = {text = "MIT"}
 
 [project.optional-dependencies]
+campbells = [
+    "campbells>=0.2.0",
+]
+bisque = [
+    "bisque>=0.1.1",
+]
 html5lib = [
     "html5lib>=1.1",
 ]
