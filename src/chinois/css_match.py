@@ -6,10 +6,25 @@ import unicodedata
 from datetime import datetime
 from typing import Any, Callable, Iterable, Iterator, Sequence, cast  # noqa: F401
 
-import campbells  # type: ignore[import]
-
 from . import css_types as ct
 from . import util
+
+try:
+    import campbells  # type: ignore[import]
+
+    has_campbells = True
+except ImportError:
+    campbells = None
+    has_campbells = False
+
+try:
+    import bisque  # type: ignore[import]
+
+    has_bisque = True
+except ImportError:
+    bisque = None
+    has_bisque = False
+
 
 # Empty tag pattern (whitespace okay)
 RE_NOT_EMPTY = re.compile("[^ \t\r\n\f]")
