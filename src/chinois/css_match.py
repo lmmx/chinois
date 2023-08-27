@@ -79,12 +79,12 @@ class _FakeParent:
     fake parent so we can traverse the root element as a child.
     """
 
-    def __init__(self, element: campbells.Tag) -> None:
+    def __init__(self, element: bisque.Tag | campbells.Tag) -> None:
         """Initialize."""
 
         self.contents = [element]
 
-    def __len__(self) -> campbells.PageElement:
+    def __len__(self) -> bisque.PageElement | campbells.PageElement:
         """Length."""
 
         return len(self.contents)
@@ -106,70 +106,101 @@ class _DocumentNav:
             )
 
     @staticmethod
-    def is_doc(obj: campbells.Tag) -> bool:
+    def is_doc(obj: bisque.Tag | campbells.Tag) -> bool:
         """Is `CampbellsSoup` object."""
-        return isinstance(obj, campbells.CampbellsSoup)
+        is_bisque_tag = has_bisque and isinstance(obj, bisque.Tag)
+        Soup = bisque.Bisque if is_bisque_tag else campbells.CampbellsSoup
+        return isinstance(obj, Soup)
 
     @staticmethod
-    def is_tag(obj: campbells.PageElement) -> bool:
+    def is_tag(obj: bisque.PageElement | campbells.PageElement) -> bool:
         """Is tag."""
-        return isinstance(obj, campbells.Tag)
+        is_bisque_elem = has_bisque and isinstance(obj, bisque.PageElement)
+        Tag = bisque.Tag if is_bisque_elem else campbells.Tag
+        return isinstance(obj, Tag)
 
     @staticmethod
-    def is_declaration(obj: campbells.PageElement) -> bool:  # pragma: no cover
+    def is_declaration(
+        obj: bisque.PageElement | campbells.PageElement,
+    ) -> bool:  # pragma: no cover
         """Is declaration."""
-        return isinstance(obj, campbells.Declaration)
+        is_bisque_elem = has_bisque and isinstance(obj, bisque.PageElement)
+        Declaration = bisque.Declaration if is_bisque_elem else campbells.Declaration
+        return isinstance(obj, Declaration)
 
     @staticmethod
-    def is_cdata(obj: campbells.PageElement) -> bool:
+    def is_cdata(obj: bisque.PageElement | campbells.PageElement) -> bool:
         """Is CDATA."""
-        return isinstance(obj, campbells.CData)
+        is_bisque_elem = has_bisque and isinstance(obj, bisque.PageElement)
+        CData = bisque.CData if is_bisque_elem else campbells.CData
+        return isinstance(obj, CData)
 
     @staticmethod
     def is_processing_instruction(
-        obj: campbells.PageElement,
+        obj: bisque.PageElement | campbells.PageElement,
     ) -> bool:  # pragma: no cover
         """Is processing instruction."""
-        return isinstance(obj, campbells.ProcessingInstruction)
+        is_bisque_elem = has_bisque and isinstance(obj, bisque.PageElement)
+        ProcessingInstruction = (
+            bisque.ProcessingInstruction
+            if is_bisque_elem
+            else campbells.ProcessingInstruction
+        )
+        return isinstance(obj, ProcessingInstruction)
 
     @staticmethod
-    def is_navigable_string(obj: campbells.PageElement) -> bool:
+    def is_navigable_string(obj: bisque.PageElement | campbells.PageElement) -> bool:
         """Is navigable string."""
-        return isinstance(obj, campbells.NavigableString)
+        is_bisque_elem = has_bisque and isinstance(obj, bisque.PageElement)
+        NavigableString = (
+            bisque.NavigableString if is_bisque_elem else campbells.NavigableString
+        )
+        return isinstance(obj, NavigableString)
 
     @staticmethod
-    def is_special_string(obj: campbells.PageElement) -> bool:
+    def is_special_string(obj: bisque.PageElement | campbells.PageElement) -> bool:
         """Is special string."""
-        return isinstance(
-            obj,
+        is_bisque_elem = has_bisque and isinstance(obj, bisque.PageElement)
+        special_tuple = (
             (
+                bisque.Comment,
+                bisque.Declaration,
+                bisque.CData,
+                bisque.ProcessingInstruction,
+                bisque.Doctype,
+            )
+            if is_bisque_elem
+            else (
                 campbells.Comment,
                 campbells.Declaration,
                 campbells.CData,
                 campbells.ProcessingInstruction,
                 campbells.Doctype,
-            ),
+            )
+        )
+        return isinstance(
+            obj,
+            special_tuple,
         )
 
     @classmethod
-    def is_content_string(cls, obj: campbells.PageElement) -> bool:
+    def is_content_string(cls, obj: bisque.PageElement | campbells.PageElement) -> bool:
         """Check if node is content string."""
-
         return cls.is_navigable_string(obj) and not cls.is_special_string(obj)
 
     @staticmethod
-    def create_fake_parent(el: campbells.Tag) -> _FakeParent:
+    def create_fake_parent(el: bisque.Tag | campbells.Tag) -> _FakeParent:
         """Create fake parent for a given element."""
 
         return _FakeParent(el)
 
     @staticmethod
-    def is_xml_tree(el: campbells.Tag) -> bool:
+    def is_xml_tree(el: bisque.Tag | campbells.Tag) -> bool:
         """Check if element (or document) is from a XML tree."""
 
         return bool(el._is_xml)
 
-    def is_iframe(self, el: campbells.Tag) -> bool:
+    def is_iframe(self, el: bisque.Tag | campbells.Tag) -> bool:
         """Check if element is an `iframe`."""
 
         return bool(
@@ -177,7 +208,7 @@ class _DocumentNav:
             and self.is_html_tag(el),  # type: ignore[attr-defined]
         )
 
-    def is_root(self, el: campbells.Tag) -> bool:
+    def is_root(self, el: bisque.Tag | campbells.Tag) -> bool:
         """
         Return whether element is a root element.
 
@@ -195,21 +226,21 @@ class _DocumentNav:
 
     def get_contents(
         self,
-        el: campbells.Tag,
+        el: bisque.Tag | campbells.Tag,
         no_iframe: bool = False,
-    ) -> Iterator[campbells.PageElement]:
+    ) -> Iterator[bisque.PageElement] | Iterator[campbells.PageElement]:
         """Get contents or contents in reverse."""
         if not no_iframe or not self.is_iframe(el):
             yield from el.contents
 
     def get_children(
         self,
-        el: campbells.Tag,
+        el: bisque.Tag | campbells.Tag,
         start: int | None = None,
         reverse: bool = False,
         tags: bool = True,
         no_iframe: bool = False,
-    ) -> Iterator[campbells.PageElement]:
+    ) -> Iterator[bisque.PageElement] | Iterator[campbells.PageElement]:
         """Get children."""
 
         if not no_iframe or not self.is_iframe(el):
@@ -233,7 +264,7 @@ class _DocumentNav:
         el: campbells.Tag,
         tags: bool = True,
         no_iframe: bool = False,
-    ) -> Iterator[campbells.PageElement]:
+    ) -> Iterator[bisque.PageElement] | Iterator[campbells.PageElement]:
         """Get descendants."""
 
         if not no_iframe or not self.is_iframe(el):
@@ -263,7 +294,11 @@ class _DocumentNav:
                 if not tags or is_tag:
                     yield child
 
-    def get_parent(self, el: campbells.Tag, no_iframe: bool = False) -> campbells.Tag:
+    def get_parent(
+        self,
+        el: bisque.Tag | campbells.Tag,
+        no_iframe: bool = False,
+    ) -> bisque.Tag | campbells.Tag:
         """Get parent."""
 
         parent = el.parent
@@ -272,25 +307,29 @@ class _DocumentNav:
         return parent
 
     @staticmethod
-    def get_tag_name(el: campbells.Tag) -> str | None:
+    def get_tag_name(el: bisque.Tag | campbells.Tag) -> str | None:
         """Get tag."""
 
         return cast("str | None", el.name)
 
     @staticmethod
-    def get_prefix_name(el: campbells.Tag) -> str | None:
+    def get_prefix_name(el: bisque.Tag | campbells.Tag) -> str | None:
         """Get prefix."""
 
         return cast("str | None", el.prefix)
 
     @staticmethod
-    def get_uri(el: campbells.Tag) -> str | None:
+    def get_uri(el: bisque.Tag | campbells.Tag) -> str | None:
         """Get namespace `URI`."""
 
         return cast("str | None", el.namespace)
 
     @classmethod
-    def get_next(cls, el: campbells.Tag, tags: bool = True) -> campbells.PageElement:
+    def get_next(
+        cls,
+        el: bisque.Tag | campbells.Tag,
+        tags: bool = True,
+    ) -> bisque.PageElement | campbells.PageElement:
         """Get next sibling tag."""
 
         sibling = el.next_sibling
@@ -301,9 +340,9 @@ class _DocumentNav:
     @classmethod
     def get_previous(
         cls,
-        el: campbells.Tag,
+        el: bisque.Tag | campbells.Tag,
         tags: bool = True,
-    ) -> campbells.PageElement:
+    ) -> bisque.PageElement | campbells.PageElement:
         """Get previous sibling tag."""
 
         sibling = el.previous_sibling
@@ -312,7 +351,7 @@ class _DocumentNav:
         return sibling
 
     @staticmethod
-    def has_html_ns(el: campbells.Tag) -> bool:
+    def has_html_ns(el: bisque.Tag | campbells.Tag) -> bool:
         """
         Check if element has an HTML namespace.
 
@@ -325,7 +364,7 @@ class _DocumentNav:
 
     @staticmethod
     def split_namespace(
-        el: campbells.Tag,
+        el: bisque.Tag | campbells.Tag,
         attr_name: str,
     ) -> tuple[str | None, str | None]:
         """Return namespace and attribute name without the prefix."""
@@ -368,7 +407,7 @@ class _DocumentNav:
     @classmethod
     def get_attribute_by_name(
         cls,
-        el: campbells.Tag,
+        el: bisque.Tag | campbells.Tag,
         name: str,
         default: str | Sequence[str] | None = None,
     ) -> str | Sequence[str] | None:
@@ -390,7 +429,7 @@ class _DocumentNav:
     @classmethod
     def iter_attributes(
         cls,
-        el: campbells.Tag,
+        el: bisque.Tag | campbells.Tag,
     ) -> Iterator[tuple[str, str | Sequence[str] | None]]:
         """Iterate attributes."""
 
@@ -398,7 +437,7 @@ class _DocumentNav:
             yield k, cls.normalize_value(v)
 
     @classmethod
-    def get_classes(cls, el: campbells.Tag) -> Sequence[str]:
+    def get_classes(cls, el: bisque.Tag | campbells.Tag) -> Sequence[str]:
         """Get classes."""
 
         classes = cls.get_attribute_by_name(el, "class", [])
@@ -406,7 +445,7 @@ class _DocumentNav:
             classes = RE_NOT_WS.findall(classes)
         return cast(Sequence[str], classes)
 
-    def get_text(self, el: campbells.Tag, no_iframe: bool = False) -> str:
+    def get_text(self, el: bisque.Tag | campbells.Tag, no_iframe: bool = False) -> str:
         """Get text."""
 
         return "".join(
@@ -417,7 +456,11 @@ class _DocumentNav:
             ],
         )
 
-    def get_own_text(self, el: campbells.Tag, no_iframe: bool = False) -> list[str]:
+    def get_own_text(
+        self,
+        el: bisque.Tag | campbells.Tag,
+        no_iframe: bool = False,
+    ) -> list[str]:
         """Get Own Text."""
 
         return [
@@ -550,7 +593,7 @@ class CSSMatch(_DocumentNav):
     def __init__(
         self,
         selectors: ct.SelectorList,
-        scope: campbells.Tag,
+        scope: bisque.Tag | campbells.Tag,
         namespaces: ct.Namespaces | None,
         flags: int,
     ) -> None:
@@ -561,10 +604,10 @@ class CSSMatch(_DocumentNav):
         self.cached_meta_lang = []  # type: list[tuple[str, str]]
         self.cached_default_forms = (
             []
-        )  # type: list[tuple[campbells.Tag, campbells.Tag]]
+        )  # type: list[tuple[bisque.Tag, bisque.Tag]] | list[tuple[campbells.Tag, campbells.Tag]]
         self.cached_indeterminate_forms = (
             []
-        )  # type: list[tuple[campbells.Tag, str, bool]]
+        )  # type: list[tuple[bisque.Tag, str, bool]] | list[tuple[campbells.Tag, str, bool]]
         self.selectors = selectors
         # type: ct.Namespaces | dict[str, str]
         self.namespaces = {} if namespaces is None else namespaces
@@ -598,7 +641,7 @@ class CSSMatch(_DocumentNav):
 
         return self.is_xml or self.has_html_namespace
 
-    def get_tag_ns(self, el: campbells.Tag) -> str:
+    def get_tag_ns(self, el: bisque.Tag | campbells.Tag) -> str:
         """Get tag namespace."""
 
         if self.supports_namespaces():
@@ -610,24 +653,24 @@ class CSSMatch(_DocumentNav):
             namespace = NS_XHTML
         return namespace
 
-    def is_html_tag(self, el: campbells.Tag) -> bool:
+    def is_html_tag(self, el: bisque.Tag | campbells.Tag) -> bool:
         """Check if tag is in HTML namespace."""
 
         return self.get_tag_ns(el) == NS_XHTML
 
-    def get_tag(self, el: campbells.Tag) -> str | None:
+    def get_tag(self, el: bisque.Tag | campbells.Tag) -> str | None:
         """Get tag."""
 
         name = self.get_tag_name(el)
         return util.lower(name) if name is not None and not self.is_xml else name
 
-    def get_prefix(self, el: campbells.Tag) -> str | None:
+    def get_prefix(self, el: bisque.Tag | campbells.Tag) -> str | None:
         """Get prefix."""
 
         prefix = self.get_prefix_name(el)
         return util.lower(prefix) if prefix is not None and not self.is_xml else prefix
 
-    def find_bidi(self, el: campbells.Tag) -> int | None:
+    def find_bidi(self, el: bisque.Tag | campbells.Tag) -> int | None:
         """Get directionality from element text."""
 
         for node in self.get_children(el, tags=False):
@@ -723,7 +766,7 @@ class CSSMatch(_DocumentNav):
 
     def match_attribute_name(
         self,
-        el: campbells.Tag,
+        el: bisque.Tag | campbells.Tag,
         attr: str,
         prefix: str | None,
     ) -> str | Sequence[str] | None:
@@ -779,7 +822,11 @@ class CSSMatch(_DocumentNav):
                 break
         return value
 
-    def match_namespace(self, el: campbells.Tag, tag: ct.SelectorTag) -> bool:
+    def match_namespace(
+        self,
+        el: bisque.Tag | campbells.Tag,
+        tag: ct.SelectorTag,
+    ) -> bool:
         """Match the namespace of the element."""
 
         match = True
@@ -803,7 +850,7 @@ class CSSMatch(_DocumentNav):
 
     def match_attributes(
         self,
-        el: campbells.Tag,
+        el: bisque.Tag | campbells.Tag,
         attributes: tuple[ct.SelectorAttribute, ...],
     ) -> bool:
         """Match attributes."""
@@ -828,7 +875,11 @@ class CSSMatch(_DocumentNav):
                     break
         return match
 
-    def match_tagname(self, el: campbells.Tag, tag: ct.SelectorTag) -> bool:
+    def match_tagname(
+        self,
+        el: bisque.Tag | campbells.Tag,
+        tag: ct.SelectorTag,
+    ) -> bool:
         """Match tag name."""
 
         name = (
@@ -838,7 +889,11 @@ class CSSMatch(_DocumentNav):
         )
         return not (name is not None and name not in (self.get_tag(el), "*"))
 
-    def match_tag(self, el: campbells.Tag, tag: ct.SelectorTag | None) -> bool:
+    def match_tag(
+        self,
+        el: bisque.Tag | campbells.Tag,
+        tag: ct.SelectorTag | None,
+    ) -> bool:
         """Match the tag."""
 
         match = True
@@ -852,7 +907,7 @@ class CSSMatch(_DocumentNav):
 
     def match_past_relations(
         self,
-        el: campbells.Tag,
+        el: bisque.Tag | campbells.Tag,
         relation: ct.SelectorList,
     ) -> bool:
         """Match past relationship."""
@@ -884,7 +939,7 @@ class CSSMatch(_DocumentNav):
 
     def match_future_child(
         self,
-        parent: campbells.Tag,
+        parent: bisque.Tag | campbells.Tag,
         relation: ct.SelectorList,
         recursive: bool = False,
     ) -> bool:
@@ -892,7 +947,7 @@ class CSSMatch(_DocumentNav):
 
         match = False
         if recursive:
-            # type: Callable[..., Iterator[campbells.Tag]]
+            # type: Callable[..., Iterator[bisque.Tag]] | Callable[..., Iterator[campbells.Tag]]
             children = self.get_descendants
         else:
             children = self.get_children
@@ -904,7 +959,7 @@ class CSSMatch(_DocumentNav):
 
     def match_future_relations(
         self,
-        el: campbells.Tag,
+        el: bisque.Tag | campbells.Tag,
         relation: ct.SelectorList,
     ) -> bool:
         """Match future relationship."""
@@ -929,7 +984,11 @@ class CSSMatch(_DocumentNav):
                 found = self.match_selectors(sibling, relation)
         return found
 
-    def match_relations(self, el: campbells.Tag, relation: ct.SelectorList) -> bool:
+    def match_relations(
+        self,
+        el: bisque.Tag | campbells.Tag,
+        relation: ct.SelectorList,
+    ) -> bool:
         """Match relationship to other elements."""
 
         found = False
@@ -944,7 +1003,7 @@ class CSSMatch(_DocumentNav):
 
         return found
 
-    def match_id(self, el: campbells.Tag, ids: tuple[str, ...]) -> bool:
+    def match_id(self, el: bisque.Tag | campbells.Tag, ids: tuple[str, ...]) -> bool:
         """Match element's ID."""
 
         found = True
@@ -954,7 +1013,11 @@ class CSSMatch(_DocumentNav):
                 break
         return found
 
-    def match_classes(self, el: campbells.Tag, classes: tuple[str, ...]) -> bool:
+    def match_classes(
+        self,
+        el: bisque.Tag | campbells.Tag,
+        classes: tuple[str, ...],
+    ) -> bool:
         """Match element's classes."""
 
         current_classes = self.get_classes(el)
@@ -965,7 +1028,7 @@ class CSSMatch(_DocumentNav):
                 break
         return found
 
-    def match_root(self, el: campbells.Tag) -> bool:
+    def match_root(self, el: bisque.Tag | campbells.Tag) -> bool:
         """Match element as root."""
 
         is_root = self.is_root(el)
@@ -993,19 +1056,27 @@ class CSSMatch(_DocumentNav):
                     sibling = self.get_next(sibling, tags=False)
         return is_root
 
-    def match_scope(self, el: campbells.Tag) -> bool:
+    def match_scope(self, el: bisque.Tag | campbells.Tag) -> bool:
         """Match element as scope."""
 
         return self.scope is el
 
-    def match_nth_tag_type(self, el: campbells.Tag, child: campbells.Tag) -> bool:
+    def match_nth_tag_type(
+        self,
+        el: bisque.Tag | campbells.Tag,
+        child: bisque.Tag | campbells.Tag,
+    ) -> bool:
         """Match tag type for `nth` matches."""
 
         return (self.get_tag(child) == self.get_tag(el)) and (
             self.get_tag_ns(child) == self.get_tag_ns(el)
         )
 
-    def match_nth(self, el: campbells.Tag, nth: campbells.Tag) -> bool:
+    def match_nth(
+        self,
+        el: bisque.Tag | campbells.Tag,
+        nth: bisque.Tag | campbells.Tag,
+    ) -> bool:
         """Match `nth` elements."""
 
         matched = True
@@ -1111,7 +1182,7 @@ class CSSMatch(_DocumentNav):
                 break
         return matched
 
-    def match_empty(self, el: campbells.Tag) -> bool:
+    def match_empty(self, el: bisque.Tag | campbells.Tag) -> bool:
         """Check if element is empty (if requested)."""
 
         is_empty = True
@@ -1126,7 +1197,7 @@ class CSSMatch(_DocumentNav):
 
     def match_subselectors(
         self,
-        el: campbells.Tag,
+        el: bisque.Tag | campbells.Tag,
         selectors: tuple[ct.SelectorList, ...],
     ) -> bool:
         """Match selectors."""
@@ -1139,7 +1210,7 @@ class CSSMatch(_DocumentNav):
 
     def match_contains(
         self,
-        el: campbells.Tag,
+        el: bisque.Tag | campbells.Tag,
         contains: tuple[ct.SelectorContains, ...],
     ) -> bool:
         """Match element if it contains text."""
@@ -1169,7 +1240,7 @@ class CSSMatch(_DocumentNav):
                 match = False
         return match
 
-    def match_default(self, el: campbells.Tag) -> bool:
+    def match_default(self, el: bisque.Tag | campbells.Tag) -> bool:
         """Match default."""
 
         match = False
@@ -1208,13 +1279,15 @@ class CSSMatch(_DocumentNav):
                         break
         return match
 
-    def match_indeterminate(self, el: campbells.Tag) -> bool:
+    def match_indeterminate(self, el: bisque.Tag | campbells.Tag) -> bool:
         """Match default."""
 
         match = False
         name = cast(str, self.get_attribute_by_name(el, "name"))
 
-        def get_parent_form(el: campbells.Tag) -> campbells.Tag | None:
+        def get_parent_form(
+            el: bisque.Tag | campbells.Tag,
+        ) -> bisque.Tag | campbells.Tag | None:
             """Find this input's form."""
             form = None
             parent = self.get_parent(el, no_iframe=True)
@@ -1274,7 +1347,11 @@ class CSSMatch(_DocumentNav):
 
         return match
 
-    def match_lang(self, el: campbells.Tag, langs: tuple[ct.SelectorLang, ...]) -> bool:
+    def match_lang(
+        self,
+        el: bisque.Tag | campbells.Tag,
+        langs: tuple[ct.SelectorLang, ...],
+    ) -> bool:
         """Match languages."""
 
         match = False
@@ -1378,7 +1455,7 @@ class CSSMatch(_DocumentNav):
 
         return match
 
-    def match_dir(self, el: campbells.Tag, directionality: int) -> bool:
+    def match_dir(self, el: bisque.Tag | campbells.Tag, directionality: int) -> bool:
         """Check directionality."""
 
         # If we have to match both left and right, we can't match either.
@@ -1449,7 +1526,7 @@ class CSSMatch(_DocumentNav):
         # Match parents direction
         return self.match_dir(self.get_parent(el, no_iframe=True), directionality)
 
-    def match_range(self, el: campbells.Tag, condition: int) -> bool:
+    def match_range(self, el: bisque.Tag | campbells.Tag, condition: int) -> bool:
         """
         Match range.
 
@@ -1498,7 +1575,7 @@ class CSSMatch(_DocumentNav):
 
         return not out_of_range if condition & ct.SEL_IN_RANGE else out_of_range
 
-    def match_defined(self, el: campbells.Tag) -> bool:
+    def match_defined(self, el: bisque.Tag | campbells.Tag) -> bool:
         """
         Match defined.
 
@@ -1519,7 +1596,7 @@ class CSSMatch(_DocumentNav):
             or self.get_prefix(el) is not None
         )
 
-    def match_placeholder_shown(self, el: campbells.Tag) -> bool:
+    def match_placeholder_shown(self, el: bisque.Tag | campbells.Tag) -> bool:
         """
         Match placeholder shown according to HTML spec.
 
@@ -1534,7 +1611,11 @@ class CSSMatch(_DocumentNav):
 
         return match
 
-    def match_selectors(self, el: campbells.Tag, selectors: ct.SelectorList) -> bool:
+    def match_selectors(
+        self,
+        el: bisque.Tag | campbells.Tag,
+        selectors: ct.SelectorList,
+    ) -> bool:
         """Check if element matches one of the selectors."""
 
         match = False
@@ -1636,7 +1717,7 @@ class CSSMatch(_DocumentNav):
 
         return match
 
-    def select(self, limit: int = 0) -> Iterator[campbells.Tag]:
+    def select(self, limit: int = 0) -> Iterator[bisque.Tag] | Iterator[campbells.Tag]:
         """Match all tags under the targeted tag."""
 
         lim = None if limit < 1 else limit
@@ -1649,7 +1730,7 @@ class CSSMatch(_DocumentNav):
                     if lim < 1:
                         break
 
-    def closest(self) -> campbells.Tag | None:
+    def closest(self) -> bisque.Tag | campbells.Tag | None:
         """Match closest ancestor."""
 
         current = self.tag
@@ -1661,7 +1742,7 @@ class CSSMatch(_DocumentNav):
                 current = self.get_parent(current)
         return closest
 
-    def filter(self) -> list[campbells.Tag]:  # noqa A001
+    def filter(self) -> list[bisque.Tag] | list[campbells.Tag]:  # noqa A001
         """Filter tag's children."""
 
         return [
@@ -1670,7 +1751,7 @@ class CSSMatch(_DocumentNav):
             if not self.is_navigable_string(tag) and self.match(tag)
         ]
 
-    def match(self, el: campbells.Tag) -> bool:
+    def match(self, el: bisque.Tag | campbells.Tag) -> bool:
         """Match."""
 
         return (
@@ -1709,20 +1790,20 @@ class SoupSieve(ct.Immutable):
             flags=flags,
         )
 
-    def match(self, tag: campbells.Tag) -> bool:
+    def match(self, tag: bisque.Tag | campbells.Tag) -> bool:
         """Match."""
 
         return CSSMatch(self.selectors, tag, self.namespaces, self.flags).match(tag)
 
-    def closest(self, tag: campbells.Tag) -> campbells.Tag:
+    def closest(self, tag: bisque.Tag | campbells.Tag) -> bisque.Tag | campbells.Tag:
         """Match closest ancestor."""
 
         return CSSMatch(self.selectors, tag, self.namespaces, self.flags).closest()
 
     def filter(
         self,
-        iterable: Iterable[campbells.Tag],
-    ) -> list[campbells.Tag]:  # noqa A001
+        iterable: Iterable[bisque.Tag] | Iterable[campbells.Tag],
+    ) -> list[bisque.Tag] | list[campbells.Tag]:  # noqa A001
         """
         Filter.
 
@@ -1748,18 +1829,26 @@ class SoupSieve(ct.Immutable):
                 if not CSSMatch.is_navigable_string(node) and self.match(node)
             ]
 
-    def select_one(self, tag: campbells.Tag) -> campbells.Tag:
+    def select_one(self, tag: bisque.Tag | campbells.Tag) -> bisque.Tag | campbells.Tag:
         """Select a single tag."""
 
         tags = self.select(tag, limit=1)
         return tags[0] if tags else None
 
-    def select(self, tag: campbells.Tag, limit: int = 0) -> list[campbells.Tag]:
+    def select(
+        self,
+        tag: bisque.Tag | campbells.Tag,
+        limit: int = 0,
+    ) -> list[bisque.Tag] | list[campbells.Tag]:
         """Select the specified tags."""
 
         return list(self.iselect(tag, limit))
 
-    def iselect(self, tag: campbells.Tag, limit: int = 0) -> Iterator[campbells.Tag]:
+    def iselect(
+        self,
+        tag: bisque.Tag | campbells.Tag,
+        limit: int = 0,
+    ) -> Iterator[bisque.Tag] | Iterator[campbells.Tag]:
         """Iterate the specified tags."""
 
         yield from CSSMatch(self.selectors, tag, self.namespaces, self.flags).select(
