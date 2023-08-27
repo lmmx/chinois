@@ -23,7 +23,7 @@ from . import css_parser as cp
 from . import css_types as ct
 from .util import DEBUG, SelectorSyntaxError  # noqa: F401
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 __all__ = [
     "DEBUG",
