@@ -108,80 +108,76 @@ class _DocumentNav:
     @staticmethod
     def is_doc(obj: bisque.Tag | campbells.Tag) -> bool:
         """Is `CampbellsSoup` object."""
-        is_bisque_tag = has_bisque and isinstance(obj, bisque.Tag)
-        Soup = bisque.Bisque if is_bisque_tag else campbells.CampbellsSoup
-        return isinstance(obj, Soup)
+        is_bisque = has_bisque and isinstance(obj, bisque.Bisque)
+        is_campbells = has_campbells and isinstance(obj, campbells.CampbellsSoup)
+        return is_bisque or is_campbells
 
     @staticmethod
     def is_tag(obj: bisque.PageElement | campbells.PageElement) -> bool:
         """Is tag."""
-        is_bisque_elem = has_bisque and isinstance(obj, bisque.PageElement)
-        Tag = bisque.Tag if is_bisque_elem else campbells.Tag
-        return isinstance(obj, Tag)
+        is_bisque = has_bisque and isinstance(obj, bisque.Tag)
+        is_campbells = has_campbells and isinstance(obj, campbells.Tag)
+        return is_bisque or is_campbells
 
     @staticmethod
     def is_declaration(
         obj: bisque.PageElement | campbells.PageElement,
     ) -> bool:  # pragma: no cover
         """Is declaration."""
-        is_bisque_elem = has_bisque and isinstance(obj, bisque.PageElement)
-        Declaration = bisque.Declaration if is_bisque_elem else campbells.Declaration
-        return isinstance(obj, Declaration)
+        is_bisque = has_bisque and isinstance(obj, bisque.Declaration)
+        is_campbells = has_campbells and isinstance(obj, campbells.Declaration)
+        return is_bisque or is_campbells
 
     @staticmethod
     def is_cdata(obj: bisque.PageElement | campbells.PageElement) -> bool:
         """Is CDATA."""
-        is_bisque_elem = has_bisque and isinstance(obj, bisque.PageElement)
-        CData = bisque.CData if is_bisque_elem else campbells.CData
-        return isinstance(obj, CData)
+        is_bisque = has_bisque and isinstance(obj, bisque.CData)
+        is_campbells = has_campbells and isinstance(obj, campbells.CData)
+        return is_bisque or is_campbells
 
     @staticmethod
     def is_processing_instruction(
         obj: bisque.PageElement | campbells.PageElement,
     ) -> bool:  # pragma: no cover
         """Is processing instruction."""
-        is_bisque_elem = has_bisque and isinstance(obj, bisque.PageElement)
-        ProcessingInstruction = (
-            bisque.ProcessingInstruction
-            if is_bisque_elem
-            else campbells.ProcessingInstruction
+        is_bisque = has_bisque and isinstance(obj, bisque.ProcessingInstruction)
+        is_campbells = has_campbells and isinstance(
+            obj,
+            campbells.ProcessingInstruction,
         )
-        return isinstance(obj, ProcessingInstruction)
+        return is_bisque or is_campbells
 
     @staticmethod
     def is_navigable_string(obj: bisque.PageElement | campbells.PageElement) -> bool:
         """Is navigable string."""
-        is_bisque_elem = has_bisque and isinstance(obj, bisque.PageElement)
-        NavigableString = (
-            bisque.NavigableString if is_bisque_elem else campbells.NavigableString
-        )
-        return isinstance(obj, NavigableString)
+        is_bisque = has_bisque and isinstance(obj, bisque.NavigableString)
+        is_campbells = has_campbells and isinstance(obj, campbells.NavigableString)
+        return is_bisque or is_campbells
 
     @staticmethod
     def is_special_string(obj: bisque.PageElement | campbells.PageElement) -> bool:
         """Is special string."""
-        is_bisque_elem = has_bisque and isinstance(obj, bisque.PageElement)
-        special_tuple = (
+        is_bisque = has_bisque and isinstance(
+            obj,
             (
                 bisque.Comment,
                 bisque.Declaration,
                 bisque.CData,
                 bisque.ProcessingInstruction,
                 bisque.Doctype,
-            )
-            if is_bisque_elem
-            else (
+            ),
+        )
+        is_campbells = has_campbells and isinstance(
+            obj,
+            (
                 campbells.Comment,
                 campbells.Declaration,
                 campbells.CData,
                 campbells.ProcessingInstruction,
                 campbells.Doctype,
-            )
+            ),
         )
-        return isinstance(
-            obj,
-            special_tuple,
-        )
+        return is_bisque or is_campbells
 
     @classmethod
     def is_content_string(cls, obj: bisque.PageElement | campbells.PageElement) -> bool:
