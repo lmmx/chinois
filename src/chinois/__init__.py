@@ -5,6 +5,7 @@ https://www.github.com/lmmx/chinois
 
 Chinois is adapted from Soup Sieve under the MIT license.
 """
+
 from __future__ import annotations
 
 from typing import Any, Iterable, Iterator

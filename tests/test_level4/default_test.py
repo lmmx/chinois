@@ -1,4 +1,5 @@
 """Test default selectors."""
+
 from .. import util
 
 

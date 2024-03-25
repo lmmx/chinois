@@ -1,4 +1,5 @@
 """Test attribute selector."""
+
 from campbells import CampbellsSoup as CS
 
 from chinois import SelectorSyntaxError

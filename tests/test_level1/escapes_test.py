@@ -1,4 +1,5 @@
 """Test escapes."""
+
 from .. import util
 
 

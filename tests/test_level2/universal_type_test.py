@@ -1,4 +1,5 @@
 """Test universal type selector."""
+
 from .. import util
 
 

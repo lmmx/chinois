@@ -1,4 +1,5 @@
 """Test read write selectors."""
+
 from .. import util
 
 

@@ -1,4 +1,5 @@
 """Test local link selectors."""
+
 from .. import util
 
 

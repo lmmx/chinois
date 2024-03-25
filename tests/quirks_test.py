@@ -1,4 +1,5 @@
 """Test quirky behaviors."""
+
 from campbells import CampbellsSoup as CS
 
 from . import util

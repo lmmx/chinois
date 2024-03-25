@@ -1,4 +1,5 @@
 """Test defined selectors."""
+
 from .. import util
 
 

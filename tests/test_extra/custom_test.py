@@ -1,4 +1,5 @@
 """Test custom selector aliases."""
+
 import chinois as ch
 
 from .. import util
