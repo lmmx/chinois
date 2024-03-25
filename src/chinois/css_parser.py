@@ -1,4 +1,5 @@
 """CSS selector parser."""
+
 from __future__ import annotations
 
 import re

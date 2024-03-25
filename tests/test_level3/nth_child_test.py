@@ -1,4 +1,5 @@
 """Test `nth` child selectors."""
+
 import chinois as ch
 from chinois import SelectorSyntaxError
 

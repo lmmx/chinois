@@ -1,4 +1,5 @@
 """Test playing selectors."""
+
 from .. import util
 
 

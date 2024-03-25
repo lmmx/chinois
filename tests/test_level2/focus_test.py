@@ -1,4 +1,5 @@
 """Test focus selector."""
+
 from .. import util
 
 

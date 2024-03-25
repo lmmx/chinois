@@ -1,4 +1,5 @@
 """Test descendant combinators."""
+
 from .. import util
 
 

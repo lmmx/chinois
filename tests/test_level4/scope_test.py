@@ -1,4 +1,5 @@
 """Test scope selectors."""
+
 import chinois as ch
 
 from .. import util

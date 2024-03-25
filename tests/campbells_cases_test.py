@@ -1,4 +1,5 @@
 """Test that we don't fail the same test cases that Campbells used to fail prior to Chinois."""
+
 import unittest
 
 from campbells import CampbellsSoup

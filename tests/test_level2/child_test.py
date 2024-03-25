@@ -1,4 +1,5 @@
 """Test child combinators."""
+
 from chinois import SelectorSyntaxError
 
 from .. import util
