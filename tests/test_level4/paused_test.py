@@ -1,4 +1,5 @@
 """Test paused selectors."""
+
 from .. import util
 
 

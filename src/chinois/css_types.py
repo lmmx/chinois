@@ -1,4 +1,5 @@
 """CSS selector structure items."""
+
 from __future__ import annotations
 
 import copyreg

@@ -1,4 +1,5 @@
 """Test class selectors."""
+
 from chinois import SelectorSyntaxError
 
 from .. import util

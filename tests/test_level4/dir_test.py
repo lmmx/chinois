@@ -1,4 +1,5 @@
 """Test direction selectors."""
+
 import chinois as ch
 
 from .. import util
