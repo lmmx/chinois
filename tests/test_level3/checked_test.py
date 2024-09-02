@@ -1,4 +1,5 @@
 """Test checked selectors."""
+
 from .. import util
 
 

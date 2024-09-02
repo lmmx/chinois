@@ -1,4 +1,5 @@
 """Test only of type selectors."""
+
 from .. import util
 
 

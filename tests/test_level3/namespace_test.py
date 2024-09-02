@@ -1,4 +1,5 @@
 """Test namespace selectors."""
+
 from .. import util
 
 

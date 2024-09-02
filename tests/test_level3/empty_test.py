@@ -1,4 +1,5 @@
 """Test empty selectors."""
+
 from .. import util
 
 

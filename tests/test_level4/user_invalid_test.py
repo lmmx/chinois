@@ -1,4 +1,5 @@
 """Test invalid selectors."""
+
 from .. import util
 
 

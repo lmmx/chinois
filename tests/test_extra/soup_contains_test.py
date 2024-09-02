@@ -1,4 +1,5 @@
 """Test contains selectors."""
+
 import warnings
 
 import chinois as ch

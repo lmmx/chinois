@@ -1,4 +1,5 @@
 """CSS matcher."""
+
 from __future__ import annotations
 
 import re
@@ -600,10 +601,12 @@ class CSSMatch(_DocumentNav):
         self.cached_meta_lang = []  # type: list[tuple[str, str]]
         self.cached_default_forms = (
             []
-        )  # type: list[tuple[bisque.Tag, bisque.Tag]] | list[tuple[campbells.Tag, campbells.Tag]]
+            # type: list[tuple[bisque.Tag, bisque.Tag]] | list[tuple[campbells.Tag, campbells.Tag]]
+        )
         self.cached_indeterminate_forms = (
             []
-        )  # type: list[tuple[bisque.Tag, str, bool]] | list[tuple[campbells.Tag, str, bool]]
+            # type: list[tuple[bisque.Tag, str, bool]] | list[tuple[campbells.Tag, str, bool]]
+        )
         self.selectors = selectors
         # type: ct.Namespaces | dict[str, str]
         self.namespaces = {} if namespaces is None else namespaces

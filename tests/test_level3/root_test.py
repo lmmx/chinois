@@ -1,4 +1,5 @@
 """Test root selectors."""
+
 import chinois as ch
 
 from .. import util
