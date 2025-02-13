@@ -414,7 +414,7 @@ class TestSoupSieve(util.TestCase):
     def test_escape_wide_unicode(self):
         """Test handling of wide Unicode."""
 
-        self.assertEqual("Emoji\\ \U0001F60D", ch.escape("Emoji \U0001F60D"))
+        self.assertEqual("Emoji\\ \U0001f60d", ch.escape("Emoji \U0001f60d"))
 
     def test_copy_pickle(self):
         """Test copy and pickle."""
